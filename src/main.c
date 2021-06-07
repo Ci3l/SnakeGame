@@ -10,6 +10,7 @@ int snakex, snakey;
 
 int main()
 {
-  drawBoundaries();
+  initializeBoundaries();
+  drawMap();
   return 0;
 }
