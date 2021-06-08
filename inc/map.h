@@ -38,3 +38,4 @@ void drawMap()
         printf("\n");
     }
 }
+
