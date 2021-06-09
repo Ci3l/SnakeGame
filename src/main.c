@@ -33,13 +33,13 @@ int main(){
     drawSnake();
     drawMap();
     /*printf("inital positions\n");
-    showSnakePostions();
+    
 
     initializeBoundaries();
     initalizeSnake();
 
     printf("initialized\n");
-    showSnakePostions();
+    
 
     drawSnake();
 
@@ -49,7 +49,7 @@ int main(){
     printf("test zone\n");
 
     setSnakePosition(10,4);
-    showSnakePostions();
+    
     drawSnake();
     drawMap();
     */
@@ -83,7 +83,7 @@ void drawSnake(){
   int i;
   for (i = 0; i <= sizeOfSP; i++){
     if (snakePositions[0][i] != 0 || snakePositions[1][i] != 0){
-      printf("x = %d y = %d\n", snakePositions[0][i], snakePositions[1][i]);
+      //printf("x = %d y = %d\n", snakePositions[0][i], snakePositions[1][i]);
       setPixelValue(snakePositions[0][i], snakePositions[1][i], '*');
     }
     
@@ -109,19 +109,17 @@ void showSnakePostions()
   {
     for (j = 0; j < 2; j++)
     {
-      printf("snakePostions[%d][%d] ->", i, j);
+      printf("snakePostions[%d][%d] ->", j, i);
       printf("%d\n", snakePositions[j][i]);
     }
     printf("\n");
   }
-
-  printf("\n%d\n", (sizeof(snakePositions) / sizeof(int)) / 2);
 }
 
 void controlHandler(char key){
   unsigned int movement = 0;
   void (*snakeMovements[])() = {up, down, left, right};
-  printf("\n%c\n",key);
+  //printf("\n%c\n",key);
   switch (key){
   case 'z': 
     movement = 0;
@@ -136,32 +134,24 @@ void controlHandler(char key){
     movement = 3;
     break;
   }
-  printf("%d",movement);
+  //printf("%d",movement);
   (*snakeMovements[movement])();
 }
 
 void up(){
-  sizeOfSP = sizeof(snakePositions) / sizeof(int);
-  setSnakePosition(snakePositions[sizeOfSP][0],(snakePositions[sizeOfSP][1])-1);
+  setSnakePosition(snakePositions[0][((score + 10) / 10)] - 1, snakePositions[1][(score + 10) / 10]);
   drawSnake();
-  drawMap();
 }
 void down(){
-  sizeOfSP = sizeof(snakePositions) / sizeof(int);
-  setSnakePosition(snakePositions[sizeOfSP + 1][0], snakePositions[sizeOfSP][1]);
+  setSnakePosition(snakePositions[0][((score + 10) / 10)] + 1, snakePositions[1][(score + 10) / 10]); 
   drawSnake();
-  drawMap();
 }
-void left(){
-  sizeOfSP = sizeof(snakePositions) / sizeof(int);
-  setSnakePosition(snakePositions[sizeOfSP + 1][0], snakePositions[sizeOfSP][1]);
+void left(){ 
+  setSnakePosition(snakePositions[0][(score + 10) / 10], (snakePositions[1][(score + 10) / 10]) - 1); 
   drawSnake();
-  drawMap();
 }
 void right(){
-  sizeOfSP = sizeof(snakePositions) / sizeof(int);
-  setSnakePosition(snakePositions[sizeOfSP + 1][0], snakePositions[sizeOfSP][1]);
+  setSnakePosition(snakePositions[0][(score + 10) / 10], (snakePositions[1][(score + 10) / 10]) + 1);
   drawSnake();
-  drawMap();
 }
 
