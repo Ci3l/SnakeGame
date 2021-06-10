@@ -2,7 +2,8 @@
 #include <conio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../inc/map.h" 
+#include "../inc/map.h"
+
 int score = 0;
 bool gameover;
 int fruitx,fruity;
@@ -13,6 +14,7 @@ void showSnakePostions();
 
 void initalizeSnake();
 void initalizeApple();
+void newCoordinatesForApple();
 void controlsHandler(char key);
 
 void addSnakeCoordinate(int,int);
@@ -24,7 +26,12 @@ void down();
 void left();
 void right();
 
-int main(){
+void increaseSnakeSize();
+
+void checkCoordinates();
+
+int main()
+{
   initializeBoundaries(),
   initalizeApple();
   initalizeSnake();
@@ -38,6 +45,7 @@ int main(){
         break;
       controlsHandler(ch);
     }
+    checkCoordinates();
   }
   return 0;
 }
@@ -93,7 +101,7 @@ void showSnakePostions()
 
 void controlsHandler(char key){
   unsigned int movement = 0;
-  void (*snakeMovements[])() = {up, down, left, right};
+  void (*snakeMovements[])() = {up, down, left, right, increaseSnakeSize};
   switch (key){
   case 'z': 
     movement = 0;
@@ -106,6 +114,9 @@ void controlsHandler(char key){
     break;
   case 'd' :
     movement = 3;
+    break;
+  case 'e' :
+    movement = 4;
     break;
   }
   (*snakeMovements[movement])();
@@ -124,3 +135,37 @@ void right(){
   addSnakeCoordinate (snakeCoordinates [0][(score + 10) / 10], (snakeCoordinates [1][(score + 10) / 10]) + 1);
 }
 
+void increaseSnakeSize(){
+  showSnakePostions();
+  int xOfNewPoint, yOfNewPoint;
+  if (snakeCoordinates[0][0] == snakeCoordinates[0][1]) { yOfNewPoint = snakeCoordinates[0][1]; xOfNewPoint = snakeCoordinates[1][0] - 1; }
+  else if (snakeCoordinates[1][0] == snakeCoordinates[1][1]) {xOfNewPoint = snakeCoordinates[1][0];yOfNewPoint = snakeCoordinates[0][0] + 1; }
+  for (int i = ((score + 10) / 10); i >= 0; i--)
+  {
+    snakeCoordinates[0][i + 1] = snakeCoordinates[0][i];
+    snakeCoordinates[1][i + 1] = snakeCoordinates[1][i];
+  }
+  showSnakePostions();
+  snakeCoordinates[0][0] = yOfNewPoint;
+  snakeCoordinates[1][0] = xOfNewPoint;
+}
+
+void checkCoordinates()
+{
+  if (snakeCoordinates[0][(score + 10) / 10] == 20 || snakeCoordinates[0][(score + 10) / 10] == 0 || snakeCoordinates[1][(score + 10) / 10] == 20 || snakeCoordinates[1][(score + 10) / 10] == 0)
+  {
+    gameover = true;
+  }
+  else if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
+  {
+    score = score + 10;
+    increaseSnakeSize();
+    newCoordinatesForApple();
+  }
+}
+
+void newCoordinatesForApple(){
+  int fruitx = (rand() % (19 - 1 + 1)) + 1;
+  int fruity = (rand() % (19 - 1 + 1)) + 1;
+  setPixelValue(fruitx, fruity, '@');
+}
