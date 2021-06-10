@@ -46,6 +46,7 @@ int main()
       controlsHandler(pressedKey);
     }
     checkCoordinates();
+    system("cls");
   }
   return 0;
 }
@@ -160,8 +161,6 @@ void checkCoordinates()
     increaseSnakeSize();
     newCoordinatesForApple();
   }
-  showSnakePostions();
-  printf("\n %d %d %d %d\n",snakeCoordinates[0][(score + 10) / 10],fruitx, snakeCoordinates[1][(score + 10) / 10], fruity);
 }
 
 void newCoordinatesForApple(){
