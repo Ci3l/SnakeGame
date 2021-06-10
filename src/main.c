@@ -40,10 +40,10 @@ int main()
     drawMap();
     if (kbhit)
     {
-      char ch = getch();    
-      if ((int)ch == 27) 
+      char pressedKey = getch();
+      if ((int)pressedKey == 27)
         break;
-      controlsHandler(ch);
+      controlsHandler(pressedKey);
     }
     checkCoordinates();
   }
@@ -136,7 +136,6 @@ void right(){
 }
 
 void increaseSnakeSize(){
-  showSnakePostions();
   int xOfNewPoint, yOfNewPoint;
   if (snakeCoordinates[0][0] == snakeCoordinates[0][1]) { yOfNewPoint = snakeCoordinates[0][1]; xOfNewPoint = snakeCoordinates[1][0] - 1; }
   else if (snakeCoordinates[1][0] == snakeCoordinates[1][1]) {xOfNewPoint = snakeCoordinates[1][0];yOfNewPoint = snakeCoordinates[0][0] + 1; }
@@ -145,7 +144,6 @@ void increaseSnakeSize(){
     snakeCoordinates[0][i + 1] = snakeCoordinates[0][i];
     snakeCoordinates[1][i + 1] = snakeCoordinates[1][i];
   }
-  showSnakePostions();
   snakeCoordinates[0][0] = yOfNewPoint;
   snakeCoordinates[1][0] = xOfNewPoint;
 }
@@ -162,10 +160,12 @@ void checkCoordinates()
     increaseSnakeSize();
     newCoordinatesForApple();
   }
+  showSnakePostions();
+  printf("\n %d %d %d %d\n",snakeCoordinates[0][(score + 10) / 10],fruitx, snakeCoordinates[1][(score + 10) / 10], fruity);
 }
 
 void newCoordinatesForApple(){
-  int fruitx = (rand() % (19 - 1 + 1)) + 1;
-  int fruity = (rand() % (19 - 1 + 1)) + 1;
+  fruitx = (rand() % (19 - 1 + 1)) + 1;
+  fruity = (rand() % (19 - 1 + 1)) + 1;
   setPixelValue(fruitx, fruity, '@');
 }
