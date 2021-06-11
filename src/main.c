@@ -2,14 +2,15 @@
 #include <conio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <windows.h>
 #include "../inc/map.h"
-#include "../inc/time.h"
+#define esc 27
 
 int score = 0, speed = 2;
-unsigned int movement = 0;
+unsigned int movement = 3;
 bool gameover, newPressedKey;
 int fruitx,fruity;
-int snakeCoordinates [1][400];
+int snakeCoordinates [1][361];
 char pressedKey;
 
 void showSnakePostions();
@@ -33,43 +34,63 @@ void increaseSnakeSize();
 
 void checkCoordinates();
 
+int GetKeyDown()
+{
+  if (kbhit())
+  {
+    return getch();
+  }
+  return -1;
+}
+
 int main()
 {
   initializeBoundaries(),
   initalizeApple();
   initalizeSnake();
   while (gameover != true){
+    int keyDown = GetKeyDown();
     drawSnake();
     drawMap();
-    if (kbhit)
+    if (keyDown == 'z')
     {
-      char pressedKey = getch();
-      if ((int)pressedKey == 27)
-        break;
-      controlsHandler(pressedKey);
-    }
-    else 
-    {
+      movement = 0;
       (*snakeMovements[movement])();
+      checkCoordinates();
+      system("cls");
       continue;
     }
+    if (keyDown == 's')
+    {
+      movement = 1;
+      (*snakeMovements[movement])();
+      checkCoordinates();
+      system("cls");
+      continue;
+    }
+    if (keyDown == 'q')
+    {
+      movement = 2;
+      (*snakeMovements[movement])();
+      checkCoordinates();
+      system("cls");
+      continue;
+    }
+    if (keyDown == 'd')
+    {
+      movement = 3;
+      (*snakeMovements[movement])();
+      checkCoordinates();
+      system("cls");
+      continue;
+    }
+    Sleep(50);
+    (*snakeMovements[movement])();
     checkCoordinates();
     system("cls");
-    //sleep(speed);
   }
   return 0;
 }
-
-/*
-void runTheSnake(int speed, int orientation){
-  void (*snakeMovements[])() = {up, down, left, right};
-  while (newPressedKey != true)
-  {
-    sleep(speed);
-    (*snakeMovements[orientation])();
-  }
-}
-*/
 
 void initalizeSnake(){
   snakeCoordinates [0][0] = 10;
