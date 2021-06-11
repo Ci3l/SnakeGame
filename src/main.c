@@ -6,12 +6,13 @@
 #include "../inc/map.h"
 #define esc 27
 
-int score = 0, speed = 2;
+int score = 0, speed ;
 unsigned int movement = 3;
 bool gameover, newPressedKey;
 int fruitx,fruity;
 int snakeCoordinates [1][361];
 char pressedKey;
+int inputlevel;
 
 void showSnakePostions();
 
@@ -45,11 +46,20 @@ int GetKeyDown()
 
 int main()
 {
+  printf("CHOOSE THE LEVEL : 1/2/3\n");
+  scanf("%d",&inputlevel);
+  if (inputlevel = 0){speed = 5000;}
+  if (inputlevel = 1){speed = 500;}
+  if (inputlevel = 2){speed = 50;}
+  else {speed = 25;}
   initializeBoundaries(),
   initalizeApple();
   initalizeSnake();
-  while (gameover != true){
+  while (gameover != true)
+  {
     int keyDown = GetKeyDown();
+    system("cls");
+    printf("\nYOUR SCORE : %d\n", score);
     drawSnake();
     drawMap();
     if (keyDown == 'z')
@@ -84,13 +94,12 @@ int main()
       system("cls");
       continue;
     }
-    Sleep(50);
+    Sleep(speed);
     (*snakeMovements[movement])();
     checkCoordinates();
-    system("cls");
+    }
+    return 0;
   }
-  return 0;
-}
 
 void initalizeSnake(){
   snakeCoordinates [0][0] = 10;
@@ -139,25 +148,6 @@ void showSnakePostions()
     }
     printf("\n");
   }
-}
-
-void controlsHandler(char key){
-  void (*snakeMovements[])() = {up, down, left, right};
-  switch (key){
-  case 'z': 
-    movement = 0;
-    break;
-  case 's' :
-    movement = 1;
-    break;
-  case 'q' :
-    movement = 2;
-    break;
-  case 'd' :
-    movement = 3;
-    break;
-  }
-  (*snakeMovements[movement])();
 }
 
 void up(){
