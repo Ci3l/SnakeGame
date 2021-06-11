@@ -3,9 +3,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "../inc/map.h"
+#include "../inc/time.h"
 
-int score = 0;
-bool gameover;
+int score = 0, speed = 2;
+unsigned int movement = 0;
+bool gameover, newPressedKey;
 int fruitx,fruity;
 int snakeCoordinates [1][400];
 char pressedKey;
@@ -25,6 +27,7 @@ void up();
 void down();
 void left();
 void right();
+void (*snakeMovements[])() = {up, down, left, right};
 
 void increaseSnakeSize();
 
@@ -45,11 +48,28 @@ int main()
         break;
       controlsHandler(pressedKey);
     }
+    else 
+    {
+      (*snakeMovements[movement])();
+      continue;
+    }
     checkCoordinates();
     system("cls");
+    //sleep(speed);
   }
   return 0;
 }
+
+/*
+void runTheSnake(int speed, int orientation){
+  void (*snakeMovements[])() = {up, down, left, right};
+  while (newPressedKey != true)
+  {
+    sleep(speed);
+    (*snakeMovements[orientation])();
+  }
+}
+*/
 
 void initalizeSnake(){
   snakeCoordinates [0][0] = 10;
@@ -101,8 +121,7 @@ void showSnakePostions()
 }
 
 void controlsHandler(char key){
-  unsigned int movement = 0;
-  void (*snakeMovements[])() = {up, down, left, right, increaseSnakeSize};
+  void (*snakeMovements[])() = {up, down, left, right};
   switch (key){
   case 'z': 
     movement = 0;
@@ -115,9 +134,6 @@ void controlsHandler(char key){
     break;
   case 'd' :
     movement = 3;
-    break;
-  case 'e' :
-    movement = 4;
     break;
   }
   (*snakeMovements[movement])();

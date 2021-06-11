@@ -37,6 +37,5 @@ void drawMap()
             printf("%c ", snakeyMap[i][j]);
         }
     }
-    
 }
 
