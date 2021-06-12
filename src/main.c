@@ -33,6 +33,11 @@ void drawSnake()
   {
     if (snakeCoordinates[0][i] != 0 || snakeCoordinates[1][i] != 0)
     {
+      if (i == ((score + 10) / 10)){
+        if (getPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i]) == '*'){
+          gameover = true ;
+        }
+      }
       setPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i], '*');
     }
   }
