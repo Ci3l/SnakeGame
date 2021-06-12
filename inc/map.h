@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-
-char snakeyMap[20][20];
+char snakeyMap[20][20];//the whole map
 
 void initializeBoundaries(){
     int x, y;
@@ -18,16 +17,19 @@ void initializeBoundaries(){
 
 char getPixelValue(int x, int y)
 {
+    //get the value of an element in the snakey map
     return snakeyMap[x][y];
 }
 
 char setPixelValue(int x, int y, char newValue)
 {
+    //set the value of an elemeent in the snakey map
     snakeyMap[x][y] = newValue;
 }
 
 void drawMap()
 {
+    //print the map
     int i,j;
     for (i = 0; i < 20; i++)
     {
