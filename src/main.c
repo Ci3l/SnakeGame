@@ -33,14 +33,19 @@ void drawSnake()
   {
     if (snakeCoordinates[0][i] != 0 && snakeCoordinates[1][i] != 0)
     {
+      if (i == ((score + 10) / 10)){
+        if (getPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i]) == '*'){
+          gameover = true ;
+        }
+      }
       setPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i], '*');
     }
   }
 }
 
-void showSnakePostions()
+void showSnakeCoordinates()
 {
-  printf("\nsnake's positions\n");
+  printf("\nsnake's coordinates\n");
   int i, j;
   for (i = 0; i <= ((score + 10) / 10); i++)
   {
@@ -123,19 +128,18 @@ void newCoordinatesForApple()
 
 void checkCoordinates()
 {
+  //check if you've hit the boundaries
+  if (snakeCoordinates[0][(score + 10) / 10] == 20 || snakeCoordinates[0][(score + 10) / 10] == 0 || snakeCoordinates[1][(score + 10) / 10] == 20 || snakeCoordinates[1][(score + 10) / 10] == 0)
+  {
+    gameover = true;
+  }
   //check if you've eaten the apple
-  if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
+  else if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
   {
     score = score + 10;
     increaseSnakeSize();
     newCoordinatesForApple();
   }
-  //check if you've hit the boundaries
-  if (snakeCoordinates[0][(score + 10) / 10] == 20 || snakeCoordinates[0][(score + 10) / 10] == 0 || snakeCoordinates[1][(score + 10) / 10] == 20 || snakeCoordinates[1][(score + 10) / 10] == 0)
-  {
-    gameover = true;
-    printf("rzfqqqqqqqqqqqqqqqq");
-  } 
 }
 
 void (*snakeMovements[])() = {up, down, left, right};
@@ -158,7 +162,6 @@ int main()
     printf("\nYOUR SCORE : %d\n", score);
     drawSnake();//add the snake's coordinates on the map
     drawMap();
-    showSnakePostions();
     if (keyDown == 'z')
     {
       snakeOrientation = 0;
@@ -194,16 +197,6 @@ int main()
      (*snakeMovements[snakeOrientation])(); //if no key is pressed the snake keep running straight ahead
     }
     checkCoordinates();
-    if (gameover == true)
-    {
-      printf("\n .gameover = true \n");
-    }
-    else
-    {
-      printf("\n .gameover = false \n");
-    }
   }
-  if(gameover == true){printf("\n gameover = true \n");}else{printf("\n gameover = false \n");}
-  showSnakePostions();
   return 0;
 }

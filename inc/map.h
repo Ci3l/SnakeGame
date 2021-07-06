@@ -40,10 +40,3 @@ void drawMap()
         }
     }
 }
-
-/*if (i == ((score + 10) / 10)){
-        if (getPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i]) == '*'){
-          printf("8");
-          gameover = true ;
-        }
-      }*/
