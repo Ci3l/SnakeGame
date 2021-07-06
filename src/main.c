@@ -33,11 +33,12 @@ void drawSnake()
   {
     if (snakeCoordinates[0][i] != 0 || snakeCoordinates[1][i] != 0)
     {
-      if (i == ((score + 10) / 10)){
+      /*if (i == ((score + 10) / 10)){
         if (getPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i]) == '*'){
+          printf("8");
           gameover = true ;
         }
-      }
+      }*/
       setPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i], '*');
     }
   }
@@ -47,7 +48,7 @@ void showSnakePostions()
 {
   printf("snake's positions\n");
   int i, j;
-  for (i = 0; i <= 2; i++)
+  for (i = 0; i <= ((score + 10) / 10); i++)
   {
     for (j = 0; j < 2; j++)
     {
@@ -121,8 +122,8 @@ void increaseSnakeSize()
 
 void newCoordinatesForApple()
 {
-  fruitx = (rand() % (19 - 1 + 1)) + 1;
-  fruity = (rand() % (19 - 1 + 1)) + 1;
+  fruitx = (rand() % (19)) + 1;
+  fruity = (rand() % (19)) + 1;
   setPixelValue(fruitx, fruity, '@');
 }
 
@@ -146,7 +147,7 @@ void (*snakeMovements[])() = {up, down, left, right};
 
 int main()
 {
-  printf("CHOOSE THE LEVEL : 1/2/3\n");//choose at which speed the snake will go 
+  printf("CHOOSE THE LEVEL : 1/2/3\n");//choose at which speed the snake will go
   scanf("%d",&inputlevel);
   if (inputlevel = 0){speed = 5000;}
   if (inputlevel = 1){speed = 500;}
@@ -155,7 +156,7 @@ int main()
   initializeBoundaries(),
   initalizeApple();
   initalizeSnake();
-  while (gameover != true)
+  while (!gameover)
   {
     int keyDown = GetKeyDown();
     system("cls");//erase everything on the powershell
@@ -194,9 +195,14 @@ int main()
       system("cls");
       continue;
     }
+    if (keyDown == 27)
+    {
+      break;
+    }
     Sleep(speed);
     (*snakeMovements[snakeOrientation])(); //if no key is pressed the snake keep running straight ahead
     checkCoordinates();
-    }
-    return 0;
   }
+  showSnakePostions();
+  return 0;
+}

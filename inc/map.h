@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-char snakeyMap[20][20];//the whole map
+char snakeyMap[21][21];//the whole map
 
 void initializeBoundaries(){
     int x, y;
     for (x = 0; x <= 20; x++){
         for (y = 0; y <= 20; y++){
-            if (x == 0 || x == 20-1 || y == 0 || y == 20){
+            if (x == 0 || x == 20 || y == 0 || y == 20 ){
                 snakeyMap[x][y] = 35;
             } else {
                 snakeyMap[x][y] = 32;
@@ -31,7 +31,7 @@ void drawMap()
 {
     //print the map
     int i,j;
-    for (i = 0; i < 20; i++)
+    for (i = 0; i <= 20; i++)
     {
         printf("\n");
         for (j = 0; j <= 20; j++)
@@ -40,4 +40,3 @@ void drawMap()
         }
     }
 }
-
