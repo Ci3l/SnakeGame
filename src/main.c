@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <conio.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <windows.h>
 #include "../inc/map.h"
@@ -9,7 +8,8 @@ unsigned int snakeOrientation = 3;
 int score = 0, speed, fruitx, fruity, inputlevel;
 int snakeCoordinates[1][361];
 char pressedKey;
-bool gameover;
+typedef enum { false, true } bool;
+bool gameover = false;
 
 void initalizeSnake()
 {
@@ -31,14 +31,8 @@ void drawSnake()
   int i;
   for (i = 0; i <= ((score + 10) / 10); i++)
   {
-    if (snakeCoordinates[0][i] != 0 || snakeCoordinates[1][i] != 0)
+    if (snakeCoordinates[0][i] != 0 && snakeCoordinates[1][i] != 0)
     {
-      /*if (i == ((score + 10) / 10)){
-        if (getPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i]) == '*'){
-          printf("8");
-          gameover = true ;
-        }
-      }*/
       setPixelValue(snakeCoordinates[0][i], snakeCoordinates[1][i], '*');
     }
   }
@@ -46,7 +40,7 @@ void drawSnake()
 
 void showSnakePostions()
 {
-  printf("snake's positions\n");
+  printf("\nsnake's positions\n");
   int i, j;
   for (i = 0; i <= ((score + 10) / 10); i++)
   {
@@ -129,18 +123,19 @@ void newCoordinatesForApple()
 
 void checkCoordinates()
 {
-  //check if you've hit the boundaries
-  if (snakeCoordinates[0][(score + 10) / 10] == 20 || snakeCoordinates[0][(score + 10) / 10] == 0 || snakeCoordinates[1][(score + 10) / 10] == 20 || snakeCoordinates[1][(score + 10) / 10] == 0)
-  {
-    gameover = true;
-  }
   //check if you've eaten the apple
-  else if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
+  if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
   {
     score = score + 10;
     increaseSnakeSize();
     newCoordinatesForApple();
   }
+  //check if you've hit the boundaries
+  if (snakeCoordinates[0][(score + 10) / 10] == 20 || snakeCoordinates[0][(score + 10) / 10] == 0 || snakeCoordinates[1][(score + 10) / 10] == 20 || snakeCoordinates[1][(score + 10) / 10] == 0)
+  {
+    gameover = true;
+    printf("rzfqqqqqqqqqqqqqqqq");
+  } 
 }
 
 void (*snakeMovements[])() = {up, down, left, right};
@@ -156,53 +151,59 @@ int main()
   initializeBoundaries(),
   initalizeApple();
   initalizeSnake();
-  while (!gameover)
+  while (gameover != true)
   {
     int keyDown = GetKeyDown();
     system("cls");//erase everything on the powershell
     printf("\nYOUR SCORE : %d\n", score);
     drawSnake();//add the snake's coordinates on the map
     drawMap();
+    showSnakePostions();
     if (keyDown == 'z')
     {
       snakeOrientation = 0;
       (*snakeMovements[snakeOrientation])();
-      checkCoordinates();
-      system("cls");
       continue;
     }
     if (keyDown == 's')
     {
       snakeOrientation = 1;
       (*snakeMovements[snakeOrientation])();
-      checkCoordinates();
-      system("cls");
       continue;
     }
     if (keyDown == 'q')
     {
       snakeOrientation = 2;
       (*snakeMovements[snakeOrientation])();
-      checkCoordinates();
-      system("cls");
       continue;
     }
     if (keyDown == 'd')
     {
       snakeOrientation = 3;
       (*snakeMovements[snakeOrientation])();
-      checkCoordinates();
-      system("cls");
+
       continue;
     }
     if (keyDown == 27)
-    {
+    { 
       break;
     }
-    Sleep(speed);
-    (*snakeMovements[snakeOrientation])(); //if no key is pressed the snake keep running straight ahead
+    else 
+    {
+      Sleep(speed);
+     (*snakeMovements[snakeOrientation])(); //if no key is pressed the snake keep running straight ahead
+    }
     checkCoordinates();
+    if (gameover == true)
+    {
+      printf("\n .gameover = true \n");
+    }
+    else
+    {
+      printf("\n .gameover = false \n");
+    }
   }
+  if(gameover == true){printf("\n gameover = true \n");}else{printf("\n gameover = false \n");}
   showSnakePostions();
   return 0;
 }
