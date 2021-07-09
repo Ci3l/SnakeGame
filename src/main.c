@@ -121,8 +121,15 @@ void increaseSnakeSize()
 
 void newCoordinatesForApple()
 {
-  fruitx = (rand() % (19)) + 1;
-  fruity = (rand() % (19)) + 1;
+  label1 :
+  fruitx = (rand() % 18)+1;
+  fruity = (rand() % 18)+1;
+  for (int i = 0; i <= ((score + 10) / 10); i++){
+    if (snakeCoordinates[0][i] == fruity || snakeCoordinates[1][i] == fruitx)
+    {
+      goto label1;
+    }
+  }
   setPixelValue(fruitx, fruity, '@');
 }
 
@@ -136,9 +143,9 @@ void checkCoordinates()
   //check if you've eaten the apple
   else if (snakeCoordinates[0][(score + 10) / 10] == fruitx && snakeCoordinates[1][(score + 10) / 10] == fruity)
   {
+    newCoordinatesForApple();
     score = score + 10;
     increaseSnakeSize();
-    newCoordinatesForApple();
   }
 }
 
@@ -197,6 +204,7 @@ int main()
      (*snakeMovements[snakeOrientation])(); //if no key is pressed the snake keep running straight ahead
     }
     checkCoordinates();
+    setPixelValue(fruitx, fruity, '@');
   }
   return 0;
 }
