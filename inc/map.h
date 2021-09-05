@@ -2,7 +2,7 @@
 
 char snakeyMap[21][21];//the whole map
 
-void initializeBoundaries(){
+void initialize_boundaries(){
     int x, y;
     for (x = 0; x <= 20; x++){
         for (y = 0; y <= 20; y++){
@@ -15,19 +15,19 @@ void initializeBoundaries(){
     }
 }
 
-char getPixelValue(int x, int y)
+char get_pixel_value(int x, int y)
 {
     //get the value of an element in the snakey map
     return snakeyMap[x][y];
 }
 
-char setPixelValue(int x, int y, char newValue)
+char set_pixel_value(int x, int y, char newValue)
 {
     //set the value of an elemeent in the snakey map
     snakeyMap[x][y] = newValue;
 }
 
-void drawMap()
+void draw_map()
 {
     //print the map
     int i,j;
