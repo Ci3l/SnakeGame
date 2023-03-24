@@ -6,7 +6,7 @@
 #include "../inc/map.h"
 
 unsigned int snake_orientation = 3;
-int score = 0, speed, fruitx, fruity, level;
+int score = 0, snake_length = 1, speed, fruitx, fruity, level;
 int snake_coordinates[1][361];
 char pressed_key;
 
@@ -31,15 +31,16 @@ void initalize_apple()
 void draw_snake()
 {
   int i;
-  for (i = 0; i <= ((score + 10) / 10); i++)
+  for (i = 0; i <= (snake_length); i++)
   {
     if (snake_coordinates[0][i] != 0 && snake_coordinates[1][i] != 0)
     {
-      if (i == ((score + 10) / 10)){
+      /*if (i == (snake_length)){
         if (get_pixel_value(snake_coordinates[0][i], snake_coordinates[1][i]) == '*'){
           gameover = true ;
+          printf("100");
         }
-      }
+      }*/
       set_pixel_value(snake_coordinates[0][i], snake_coordinates[1][i], '*');
     }
   }
@@ -50,7 +51,7 @@ void show_snake_coordinates()
 {
   printf("\nsnake's coordinates\n");
   int i, j;
-  for (i = 0; i <= ((score + 10) / 10); i++)
+  for (i = 0; i <= (snake_length); i++)
   {
     for (j = 0; j < 2; j++)
     {
@@ -74,30 +75,30 @@ int get_key_down()
 void new_coordinates_for_snake_head(int newX, int newY)
 {
   set_pixel_value(snake_coordinates[0][0], snake_coordinates[1][0], 32); //erase the the tip of the tail of the snake
-  for (int i = 0; i <= ((score + 10) / 10); i++)                     //shift the coordinates
+  for (int i = 0; i <= (snake_length); i++)                     //shift the coordinates
   {
     snake_coordinates[0][i] = snake_coordinates[0][i + 1];
     snake_coordinates[1][i] = snake_coordinates[1][i + 1];
   }
-  snake_coordinates[0][(score + 10) / 10] = newX; //new coordinates for the head
-  snake_coordinates[1][(score + 10) / 10] = newY;
+  snake_coordinates[0][snake_length] = newX; //new coordinates for the head
+  snake_coordinates[1][snake_length] = newY;
 }
 
 void up()
 {
-  new_coordinates_for_snake_head(snake_coordinates[0][((score + 10) / 10)] - 1, snake_coordinates[1][(score + 10) / 10]);
+  new_coordinates_for_snake_head(snake_coordinates[0][(snake_length)] - 1, snake_coordinates[1][snake_length]);
 }
 void down()
 {
-  new_coordinates_for_snake_head(snake_coordinates[0][((score + 10) / 10)] + 1, snake_coordinates[1][(score + 10) / 10]);
+  new_coordinates_for_snake_head(snake_coordinates[0][(snake_length)] + 1, snake_coordinates[1][snake_length]);
 }
 void left()
 {
-  new_coordinates_for_snake_head(snake_coordinates[0][(score + 10) / 10], (snake_coordinates[1][(score + 10) / 10]) - 1);
+  new_coordinates_for_snake_head(snake_coordinates[0][snake_length], (snake_coordinates[1][snake_length]) - 1);
 }
 void right()
 {
-  new_coordinates_for_snake_head(snake_coordinates[0][(score + 10) / 10], (snake_coordinates[1][(score + 10) / 10]) + 1);
+  new_coordinates_for_snake_head(snake_coordinates[0][snake_length], (snake_coordinates[1][snake_length]) + 1);
 }
 
 void increase_snake_size()
@@ -114,7 +115,7 @@ void increase_snake_size()
     xOfNewPoint = snake_coordinates[1][0];
     yOfNewPoint = snake_coordinates[0][0] + 1;
   }
-  for (int i = ((score + 10) / 10); i >= 0; i--) //shift the coordinates to make room for the new point
+  for (int i = (snake_length); i >= 0; i--) //shift the coordinates to make room for the new point
   {
     snake_coordinates[0][i + 1] = snake_coordinates[0][i];
     snake_coordinates[1][i + 1] = snake_coordinates[1][i];
@@ -129,7 +130,7 @@ void new_coordinates_for_apple()
     srand(time(NULL));
     fruitx = (rand() % 18) + 1;
     fruity = (rand() % 18) + 1;
-    for (int i = 0; i <= ((score + 10) / 10); i++)
+    for (int i = 0; i <= (snake_length); i++)
     {
       if (snake_coordinates[0][i] == fruity || snake_coordinates[1][i] == fruitx)
       {
@@ -142,15 +143,16 @@ void new_coordinates_for_apple()
 void checkCoordinates()
 {
   //check if you've hit the boundaries
-  if (snake_coordinates[0][(score + 10) / 10] == 20 || snake_coordinates[0][(score + 10) / 10] == 0 || snake_coordinates[1][(score + 10) / 10] == 20 || snake_coordinates[1][(score + 10) / 10] == 0)
+  if (snake_coordinates[0][snake_length] == 20 || snake_coordinates[0][snake_length] == 0 || snake_coordinates[1][snake_length] == 20 || snake_coordinates[1][snake_length] == 0)
   {
     gameover = true;
   }
   //check if you've eaten the apple
-  else if (snake_coordinates[0][(score + 10) / 10] == fruitx && snake_coordinates[1][(score + 10) / 10] == fruity)
+  else if (snake_coordinates[0][snake_length] == fruitx && snake_coordinates[1][snake_length] == fruity)
   {
     new_coordinates_for_apple();
-    score = score + 10;
+    score += 10;
+    snake_length = (score + 10)/10;
     increase_snake_size();
   }
 }
@@ -178,27 +180,18 @@ int main()
     if (keyDown == 'z')
     {
       snake_orientation = 0;
-      (*snakeMovements[snake_orientation])();
-      continue;
     }
     if (keyDown == 's')
     {
       snake_orientation = 1;
-      (*snakeMovements[snake_orientation])();
-      continue;
     }
     if (keyDown == 'q')
     {
       snake_orientation = 2;
-      (*snakeMovements[snake_orientation])();
-      continue;
     }
     if (keyDown == 'd')
     {
       snake_orientation = 3;
-      (*snakeMovements[snake_orientation])();
-
-      continue;
     }
     if (keyDown == 27)
     { 
@@ -206,9 +199,9 @@ int main()
     }
     else 
     {
-      Sleep(speed);
-     (*snakeMovements[snake_orientation])(); //if no key is pressed the snake keep running straight ahead
+      Sleep(speed); //if no key is pressed the snake keep running straight ahead
     }
+    (*snakeMovements[snake_orientation])();
     checkCoordinates();
     set_pixel_value(fruitx, fruity, '@');
   }
